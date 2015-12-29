@@ -4,24 +4,34 @@ namespace s9e\WebServices\Minifier;
 
 use s9e\TextFormatter\Configurator\JavaScript\Minifiers\FirstAvailable;
 
-// Prepare a 500 header in case anything goes wrong
+// Prepare a 500 header and capture the output in case anything goes wrong
 header('Content-type: text/plain', true, 500);
+ob_start();
+
+function send($status, $msg)
+{
+	ob_end_clean();
+	header('Content-length: ' . strlen($msg), true, $status);
+	die($msg);
+}
 
 $code = file_get_contents('php://input');
 if ($code === '')
 {
-	http_response_code(400);
-	die('No code');
+	send(400, 'No code');
 }
-if (strlen($code) > 300000)
+if (substr($code, 0, 2) === "\x1f\x8b")
 {
-	http_response_code(413);
-	die('Payload too large');
+	// Only decode the max payload to avoid gzip bombs
+	$code = gzdecode($code, 300000);
+}
+if (strlen($code) >= 300000)
+{
+	send(413, 'Payload too large');
 }
 if (strpos($code, 's9e') === false)
 {
-	http_response_code(403);
-	die('Unauthorized');
+	send(403, 'Unauthorized');
 }
 
 $minifiedCode   = null;
@@ -52,19 +62,16 @@ else
 	}
 	catch (Exception $e)
 	{
-		die($e->getMessage());
+		send(500, $e->getMessage());
 	}
 
 	file_put_contents($cacheFile, $compressedCode);
 }
 
-http_response_code(200);
-
 if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)
 {
 	header('Content-encoding: gzip');
-	header('Content-length: ' . strlen($compressedCode));
-	die($compressedCode);
+	send(200, $compressedCode);
 }
 
 if (!isset($minifiedCode))
@@ -72,5 +79,4 @@ if (!isset($minifiedCode))
 	$minifiedCode = gzdecode($compressedCode);
 }
 
-header('Content-length: ' . strlen($minifiedCode));
-die($minifiedCode);
+send(200, $minifiedCode);
