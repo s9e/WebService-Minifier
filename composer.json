@@ -1,0 +1,8 @@
+{
+	"name": "s9e/webservice-minifier",
+	"version": "0.0.1-dev",
+	"type": "project",
+	"require": {
+		"s9e/text-formatter": "dev-master"
+	}
+}
