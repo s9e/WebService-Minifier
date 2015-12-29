@@ -20,6 +20,7 @@ if ($code === '')
 {
 	send(400, 'No code');
 }
+// Sniff whether the payload is gzip-encoded
 if (substr($code, 0, 2) === "\x1f\x8b")
 {
 	// Only decode the max payload to avoid gzip bombs
@@ -48,10 +49,13 @@ else
 {
 	include __DIR__ . '/../vendor/autoload.php';
 
-	$minifier = new FirstAvailable(
-		['ClosureCompilerApplication', __DIR__ . '/../bin/compiler.jar'],
-		'ClosureCompilerService'
-	);
+	$minifier = new FirstAvailable;
+	$binPath  = __DIR__ . '/../bin/compiler.jar';
+	if (file_exists($binPath))
+	{
+		$minifier->add('ClosureCompilerApplication', $binPath);
+	}
+	$minifier->add('ClosureCompilerService');
 
 	try
 	{
