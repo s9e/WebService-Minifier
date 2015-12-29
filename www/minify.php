@@ -7,25 +7,21 @@ use s9e\TextFormatter\Configurator\JavaScript\Minifiers\FirstAvailable;
 // Prepare a 500 header in case anything goes wrong
 header('Content-type: text/plain', true, 500);
 
-if (empty($_POST['code']))
+$code = file_get_contents('php://input');
+if ($code === '')
 {
 	http_response_code(400);
 	die('No code');
 }
-
-$code = $_POST['code'];
-
-// H4sI === the first 3 bytes of a gzip header, encoded in base64
-if (substr($code, 0, 4) === 'H4sI')
-{
-	// Only decode the max payload to avoid gzip bombs
-	$code = gzdecode(base64_decode(strtr($code, '-_', '+/')), 300000);
-}
-
-if (strlen($code) >= 300000)
+if (strlen($code) > 300000)
 {
 	http_response_code(413);
 	die('Payload too large');
+}
+if (strpos($code, 's9e') === false)
+{
+	http_response_code(403);
+	die('Unauthorized');
 }
 
 $minifiedCode   = null;
@@ -40,12 +36,6 @@ if (file_exists($cacheFile))
 }
 else
 {
-	if (strpos($code, 's9e') === false)
-	{
-		http_response_code(403);
-		die('Unauthorized');
-	}
-
 	include __DIR__ . '/../vendor/autoload.php';
 
 	$minifier = new FirstAvailable(
