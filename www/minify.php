@@ -53,7 +53,7 @@ else
 	$binPath  = __DIR__ . '/../bin/compiler.jar';
 	if (file_exists($binPath))
 	{
-		$minifier->add('ClosureCompilerApplication', $binPath);
+		$minifier->add(['ClosureCompilerApplication', $binPath]);
 	}
 	$minifier->add('ClosureCompilerService');
 
