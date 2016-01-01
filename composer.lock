@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "aa6e9d4e97dd69cacd7d3e4330544e63",
-    "content-hash": "48b2d4883e1b62b81a31b37fe5ce0e76",
+    "hash": "c7f8654cf8f2602954efb7b552210e02",
+    "content-hash": "aeba2263d020a6d19dd6031bd52ec59c",
     "packages": [
         {
             "name": "s9e/text-formatter",
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/s9e/TextFormatter.git",
-                "reference": "faeafd630088a08b2abc5d697002190ec64964ad"
+                "reference": "b730287275c83c24960cc75290bfdcd65d0bc43d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/s9e/TextFormatter/zipball/faeafd630088a08b2abc5d697002190ec64964ad",
-                "reference": "faeafd630088a08b2abc5d697002190ec64964ad",
+                "url": "https://api.github.com/repos/s9e/TextFormatter/zipball/b730287275c83c24960cc75290bfdcd65d0bc43d",
+                "reference": "b730287275c83c24960cc75290bfdcd65d0bc43d",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
                 "parser",
                 "shortcodes"
             ],
-            "time": "2015-12-20 07:54:38"
+            "time": "2016-01-01 16:58:33"
         }
     ],
     "packages-dev": [],
@@ -75,6 +75,8 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=5.6.0"
+    },
     "platform-dev": []
 }

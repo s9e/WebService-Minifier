@@ -3,6 +3,12 @@
 	"version": "0.0.1-dev",
 	"type": "project",
 	"require": {
+		"php":                ">=5.6.0",
 		"s9e/text-formatter": "dev-master"
+	},
+	"autoload": {
+		"psr-4": {
+			"s9e\\WebServices\\Minifier\\": "src"
+		}
 	}
 }
