@@ -6,6 +6,7 @@ wait
 
 cd "$(dirname $(dirname $0))/bin"
 unzip -n /tmp/compiler-latest.zip compiler.jar
+chmod 0444 compiler.jar
 
 cd ..
 php /tmp/composer.phar install
