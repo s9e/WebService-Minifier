@@ -103,6 +103,7 @@ class Minifier
 		if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)
 		{
 			header('Content-encoding: gzip');
+			header('Vary: Content-encoding');
 			$this->sendResponse(200, $compressedCode);
 		}
 
