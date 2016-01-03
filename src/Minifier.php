@@ -7,6 +7,7 @@
 */
 namespace s9e\WebServices\Minifier;
 
+use Exception;
 use s9e\TextFormatter\Configurator\JavaScript\Minifiers\FirstAvailable;
 
 class Minifier
@@ -49,7 +50,7 @@ class Minifier
 	public function handleRequest()
 	{
 		// Prepare a 500 header and capture the output in case anything goes wrong
-		header('Content-type: text/plain', true, 500);
+		header('Content-type: application/octet-stream', true, 500);
 		ob_start();
 
 		$code = file_get_contents('php://input');
@@ -89,7 +90,7 @@ class Minifier
 				ignore_user_abort(true);
 
 				$minifiedCode   = $this->getMinifier()->minify($code);
-				$compressedCode = gzencode($minifiedCode, $this->config['gzLevel']);
+				$compressedCode = gzencode($minifiedCode, $this->gzLevel);
 			}
 			catch (Exception $e)
 			{
@@ -145,6 +146,7 @@ class Minifier
 		ob_end_clean();
 		header('Content-length: ' . strlen($body), true, $status);
 
-		die($body);
+		echo $body;
+		exit;
 	}
 }
