@@ -50,7 +50,7 @@ class Minifier
 	public function handleRequest()
 	{
 		// Prepare a 500 header and capture the output in case anything goes wrong
-		header('Content-type: application/octet-stream', true, 500);
+		header('Content-Type: application/octet-stream', true, 500);
 		ob_start();
 
 		$code = file_get_contents('php://input');
@@ -102,8 +102,8 @@ class Minifier
 
 		if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)
 		{
-			header('Content-encoding: gzip');
-			header('Vary: Content-encoding');
+			header('Content-Encoding: gzip');
+			header('Vary: Accept-Encoding');
 			$this->sendResponse(200, $compressedCode);
 		}
 
@@ -145,7 +145,7 @@ class Minifier
 	protected function sendResponse($status, $body)
 	{
 		ob_end_clean();
-		header('Content-length: ' . strlen($body), true, $status);
+		header('Content-Length: ' . strlen($body), true, $status);
 
 		echo $body;
 		exit;
