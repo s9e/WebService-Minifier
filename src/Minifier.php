@@ -53,30 +53,11 @@ class Minifier
 		header('Content-Type: application/octet-stream', true, 500);
 		ob_start();
 
-		$code = file_get_contents('php://input');
-		if ($code === '')
-		{
-			$this->sendResponse(400, 'No code');
-		}
-		// Sniff whether the payload is gzip-encoded
-		if (substr($code, 0, 2) === "\x1f\x8b")
-		{
-			// Only decode the max payload to avoid gzip bombs
-			$code = gzdecode($code, $this->maxPayload);
-		}
-		if (strlen($code) >= $this->maxPayload)
-		{
-			$this->sendResponse(413, 'Payload too large');
-		}
-		if (isset($this->mustContain) && strpos($code, $this->mustContain) === false)
-		{
-			$this->sendResponse(403, 'Unauthorized');
-		}
-
 		$minifiedCode   = null;
 		$compressedCode = null;
 
-		$hash = strtr(base64_encode(sha1($code, true) . md5($code, true)), '+/', '-_');
+		$code = $this->getRequestBody();
+		$hash = $this->getHash($code);
 
 		$cacheFile = $this->cacheDir . $hash . '.gz';
 		if (file_exists($cacheFile))
@@ -116,6 +97,17 @@ class Minifier
 	}
 
 	/**
+	* Compute a source's hash
+	*
+	* @param  string $src Original source
+	* @return string      36 bytes string
+	*/
+	protected function getHash($src)
+	{
+		return strtr(base64_encode(sha1($src, true) . md5($src, true)), '+/', '-_');
+	}
+
+	/**
 	* Get a fully configured minifier
 	*
 	* @return FirstAvailable
@@ -133,6 +125,36 @@ class Minifier
 		}
 
 		return $mainMinifier;
+	}
+
+	/**
+	* Get the request body, enforce the configured limitations and return it uncompressed
+	*
+	* @return string
+	*/
+	protected function getRequestBody()
+	{
+		$body = file_get_contents('php://input');
+		if ($body === '')
+		{
+			$this->sendResponse(400, 'No code');
+		}
+		// Sniff whether the payload is gzip-encoded
+		if (substr($body, 0, 2) === "\x1f\x8b")
+		{
+			// Only decode the max payload to avoid gzip bombs
+			$body = gzdecode($body, $this->maxPayload);
+		}
+		if (strlen($body) >= $this->maxPayload)
+		{
+			$this->sendResponse(413, 'Payload too large');
+		}
+		if (isset($this->mustContain) && strpos($body, $this->mustContain) === false)
+		{
+			$this->sendResponse(403, 'Unauthorized');
+		}
+
+		return $body;
 	}
 
 	/**
