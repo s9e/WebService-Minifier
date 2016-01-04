@@ -43,15 +43,35 @@ class Minifier
 	public $mustContain = 's9e';
 
 	/**
-	* Handle an incoming request
+	* Handle the current request
 	*
 	* @return void
 	*/
 	public function handleRequest()
 	{
-		// Prepare a 500 header and capture the output in case anything goes wrong
-		header('Content-Type: application/octet-stream', true, 500);
+		// Capture the output in case anything goes wrong and display_errors is on
 		ob_start();
+
+		try
+		{
+			$this->processRequest();
+			throw new Exception('An unspecified error occured');
+		}
+		catch (Exception $e)
+		{
+			$this->sendResponse(500, $e->getMessage());
+		}
+	}
+
+	/**
+	* Process the current request
+	*
+	* @return void
+	*/
+	protected function processRequest()
+	{
+		// Prepare a 500 header in case anything goes wrong
+		header('Content-Type: application/octet-stream', true, 500);
 
 		$minifiedCode   = null;
 		$compressedCode = null;
@@ -66,17 +86,10 @@ class Minifier
 		}
 		else
 		{
-			try
-			{
-				ignore_user_abort(true);
+			ignore_user_abort(true);
 
-				$minifiedCode   = $this->getMinifier()->minify($code);
-				$compressedCode = gzencode($minifiedCode, $this->gzLevel);
-			}
-			catch (Exception $e)
-			{
-				$this->sendResponse(500, $e->getMessage());
-			}
+			$minifiedCode   = $this->getMinifier()->minify($code);
+			$compressedCode = gzencode($minifiedCode, $this->gzLevel);
 
 			file_put_contents($cacheFile, $compressedCode);
 		}
