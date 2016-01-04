@@ -2,8 +2,9 @@ Experimental minifier service to be used with [s9e\\TextFormatter](https://githu
 
 ### Installation
 
-Download the [latest release of Google Closure Compiler](http://dl.google.com/closure-compiler/compiler-latest.zip) and copy `compiler.jar` to the `bin` directory.
-Make sure that `www/cache` is writable.
+Run `scripts/install.sh`. It will download the [latest release of Google Closure Compiler](http://dl.google.com/closure-compiler/compiler-latest.zip), copy `compiler.jar` to the `bin` directory, run composer and make `www/cache` writable.
+
+Only the `www` directory needs to be publicly accessible.
 
 ### API
 
