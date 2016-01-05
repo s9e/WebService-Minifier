@@ -8,7 +8,7 @@ Only the `www` directory needs to be publicly accessible.
 
 ### API
 
-`www/minify.php` accepts POST requests, receives the original source code as raw data in the request's body and returns the minified code in the response body.
+`www/index.php` accepts POST requests, receives the original source code as raw data in the request's body and returns the minified code in the response body.
 
 ### Maintenance
 

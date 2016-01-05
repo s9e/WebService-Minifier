@@ -34,13 +34,13 @@ class Minifier
 		'ClosureCompilerApplication' => [
 			'closureCompilerBin' => __DIR__ . '/../bin/compiler.jar'
 		],
-//		'ClosureCompilerService' => []
+		'ClosureCompilerService' => []
 	];
 
 	/**
 	* @var string If set, the unminified code must contain this string
 	*/
-	public $mustContain = 's9e';
+	public $mustContain;
 
 	/**
 	* Handle the current request
