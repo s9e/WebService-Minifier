@@ -9,6 +9,9 @@ $minifier->minifiers = [
 	'ClosureCompilerService' => [
 		'compilationLevel' => 'SIMPLE_OPTIMIZATIONS',
 		'timeout'          => 60
+	],
+	'ClosureCompilerApplication' => [
+		'closureCompilerBin' => __DIR__ . '/../../bin/compiler.jar'
 	]
 ];
 $minifier->mustContain = null;
