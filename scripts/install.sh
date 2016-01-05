@@ -12,3 +12,4 @@ cd ..
 php /tmp/composer.phar install
 
 chmod +w www/cache
+chmod +w www/flarum/cache
