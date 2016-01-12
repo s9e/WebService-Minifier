@@ -49,8 +49,9 @@ class Minifier
 	*/
 	public function handleRequest()
 	{
-		// Capture the output in case anything goes wrong and display_errors is on
+		// Capture the output and prepare a 500 header in case anything goes wrong
 		ob_start();
+		header('Content-Type: application/octet-stream', true, 500);
 
 		try
 		{
@@ -119,9 +120,6 @@ class Minifier
 	*/
 	protected function processMinifierRequest()
 	{
-		// Prepare a 500 header in case anything goes wrong
-		header('Content-Type: application/octet-stream', true, 500);
-
 		$minifiedCode   = null;
 		$compressedCode = null;
 
