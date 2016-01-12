@@ -160,7 +160,7 @@ class Minifier
 	* Compute a source's hash
 	*
 	* @param  string $src Original source
-	* @return string      36 bytes string
+	* @return string      48 bytes string
 	*/
 	protected function getHash($src)
 	{
