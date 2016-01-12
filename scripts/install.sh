@@ -11,4 +11,4 @@ chmod 0444 compiler.jar
 cd ..
 php /tmp/composer.phar install
 
-chmod +w www/cache
+chmod +w storage

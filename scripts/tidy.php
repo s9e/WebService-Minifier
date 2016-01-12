@@ -6,7 +6,7 @@ $maxSize = (isset($_SERVER['argv'][1])) ? $_SERVER['argv'][1] * 1048576 : 10e6;
 
 // Stat all the .gz file in the cache dir
 $files = [];
-foreach (glob(__DIR__ . '/../www/cache/*.gz') as $filepath)
+foreach (glob(__DIR__ . '/../storage/*.gz') as $filepath)
 {
 	$files[$filepath] = stat($filepath);
 }

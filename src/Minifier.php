@@ -54,7 +54,14 @@ class Minifier
 
 		try
 		{
-			$this->processRequest();
+			if (isset($_GET['hash']))
+			{
+				$this->processCacheRequest();
+			}
+			else
+			{
+				$this->processMinifierRequest();
+			}
 			throw new Exception('An unspecified error occured');
 		}
 		catch (Exception $e)
@@ -64,11 +71,53 @@ class Minifier
 	}
 
 	/**
-	* Process the current request
+	* Return whether the request's client supports gzip
+	*
+	* @return bool
+	*/
+	protected function clientSupportsGzip()
+	{
+		return (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false);
+	}
+
+	/**
+	* Process the current cache request
 	*
 	* @return void
 	*/
-	protected function processRequest()
+	protected function processCacheRequest()
+	{
+		if (!preg_match('(^[-\\w]{48}$)D', $_GET['hash']))
+		{
+			$this->sendResponse(400, 'Bad cache ID');
+		}
+
+		$filepath = $this->cacheDir . $_GET['hash'] . '.gz';
+		if (!file_exists($filepath))
+		{
+			$this->sendResponse(404, 'Not in cache');
+		}
+
+		$content = file_get_contents($filepath);
+		if ($this->clientSupportsGzip())
+		{
+			header('Content-Encoding: gzip');
+			header('Vary: Accept-Encoding');
+		}
+		else
+		{
+			$content = gzdecode($content);
+		}
+
+		$this->sendResponse(200, $content);
+	}
+
+	/**
+	* Process the current minifier request
+	*
+	* @return void
+	*/
+	protected function processMinifierRequest()
 	{
 		// Prepare a 500 header in case anything goes wrong
 		header('Content-Type: application/octet-stream', true, 500);
@@ -94,7 +143,7 @@ class Minifier
 			file_put_contents($cacheFile, $compressedCode);
 		}
 
-		if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)
+		if ($this->clientSupportsGzip())
 		{
 			header('Content-Encoding: gzip');
 			header('Vary: Accept-Encoding');
