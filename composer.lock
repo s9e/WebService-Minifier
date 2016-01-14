@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/s9e/TextFormatter.git",
-                "reference": "b730287275c83c24960cc75290bfdcd65d0bc43d"
+                "reference": "0d739ff72f3e2beffcbb048c89a21ab6af281024"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/s9e/TextFormatter/zipball/b730287275c83c24960cc75290bfdcd65d0bc43d",
-                "reference": "b730287275c83c24960cc75290bfdcd65d0bc43d",
+                "url": "https://api.github.com/repos/s9e/TextFormatter/zipball/0d739ff72f3e2beffcbb048c89a21ab6af281024",
+                "reference": "0d739ff72f3e2beffcbb048c89a21ab6af281024",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
                 "parser",
                 "shortcodes"
             ],
-            "time": "2016-01-01 16:58:33"
+            "time": "2016-01-14 09:07:42"
         }
     ],
     "packages-dev": [],
