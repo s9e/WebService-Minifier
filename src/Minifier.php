@@ -15,7 +15,7 @@ class Minifier
 	/**
 	* @var string Path to cache dir
 	*/
-	public $cacheDir = __DIR__ . '/../www/cache/';
+	public $cacheDir = __DIR__ . '/../storage/';
 
 	/**
 	* @var integer Compression level at which minified code is stored/sent
