@@ -178,10 +178,7 @@ class Minifier
 		foreach ($this->minifiers as $name => $props)
 		{
 			$minifier = $mainMinifier->add($name);
-			foreach ($props as $propName => $propValue)
-			{
-				$minifier->$propName = $propValue;
-			}
+			$this->setProps($minifier, $props);
 		}
 
 		return $mainMinifier;
@@ -231,5 +228,27 @@ class Minifier
 
 		echo $body;
 		exit;
+	}
+
+	/**
+	* Set multiple properties on given object
+	*
+	* @param  mixed $object
+	* @param  array $props
+	* @return void
+	*/
+	protected function setProps($object, array $props)
+	{
+		foreach ($props as $propName => $propValue)
+		{
+			if (is_array($propValue))
+			{
+				$this->setProps($object->$propName, $propValue);
+			}
+			else
+			{
+				$object->$propName = $propValue;
+			}
+		}
 	}
 }
